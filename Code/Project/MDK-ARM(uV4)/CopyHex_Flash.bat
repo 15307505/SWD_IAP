@@ -1,0 +1,1 @@
+copy Objects\IAP.hex ..\output(mdk).hex

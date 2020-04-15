@@ -1,0 +1,68 @@
+2014-12-06
+1. 修改 bsp_nor_flash.c 调整FSMC访问时序，提高连续读写时的稳定性
+2. 优化 LCD_RA8875.c for 8080 16位模式 中 RA8875_PutPixel()函数
+
+2014-11-07
+1. 修改 bsp_dac8501.c， 实现SPI总线共享。
+2. 优化 LCD_RA8875.c for 8080 16位模式 中 RA8875_PutPixel()函数
+
+2014-11-06
+1. 增加 bsp_spi_bus.c 将SPI底层时序独立出来。支持硬件和软件模拟两种方式。
+	支持不同类别的SPI设备共享SPI总线。
+
+2014-11-04
+1. stm32f4x7_eth.h  修改PHY配置超时时间。没插网线时，需要等待30秒才能进入。
+   插上网线后一般3秒内可以进入。因此调小超时时间。
+#define PHY_READ_TO                     ((uint32_t)0x0004FFFF)
+修改为 ：  ((uint32_t)0x000FFFF)  大约5秒超时可进入界面。
+
+2014-10-20
+1. 添加LCD_ILI9488.c
+2. 修改 bsp_touch.c, bsp_tft_lcd.c 支持TSC2046触摸和屏幕旋转
+3. bsp_touch.c 中的TSC2046驱动函数单独为文件： bsp_tsc2046.c
+
+2014-10-16
+1. 添加bsp_modbus.c   bsp_485_led.c  bsp_user_lib.c
+
+2014-06-27
+1. bsp_tim_pwm.c 升级到V1.1， 修改PWM输出不能调节占空比的问题
+2. bsp_ra8875_flash.c 。 升级支持 W25Q128
+3. bsp_nand_flash.c  升级支持 512MB型号: H27U4G8F2DTR, 解决部分BUG
+
+2014-02-26
+1. 配合固件库V1.3.0升级
+2. 添加bsp_wwdg.c bsp_iwdg.c 和  bsp_dwt.c
+
+2014-02-18
+1. 增加 bsp_ps2.c
+
+2014-02-16
+1. 修改 bsp_key.c 增加设置按键参数的函数
+
+2014-01-31
+1. 修改 bsp_nor_flash.c
+   将整片擦除函数拆分，便于主程序查询进度。
+
+2014-01-28
+1. 添加ds18b20, tm7705, dac8501,ads1256 驱动
+
+2013-09-25
+1. 替换宏 STM32_X4 -> STM32_X3
+2. 分离 LCD_RA8875.c 文件，将底层接口分到 bsp_ra8875_port.c 文件
+3. 判断LED亮灭的函数，返回值逻辑反了。已更正。
+
+
+2013-07-31
+1.修改 bsp_touch.c; 修改TOUCH_WaitRelease(),计数器需要清零
+
+2013-07-30
+1.修改 DispEdit() 支持12点阵汉字对齐
+
+2013-07-26
+1. 修改 bsp_touch.c; 改进飞点滤波算法
+
+2013-07-16
+1. 添加 bsp_vs1053b.c MP3解码模块
+
+2013-07-14
+1. 修改 bsp_wm8978.c 文件。增加 bsp_SetLineGain() 函数。

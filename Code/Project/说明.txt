@@ -1,0 +1,8 @@
+【EWARMv6】     IAR公司EWARM工程文件夹
+
+【MDK-ARM(uV4)】KEIL的MDK工程文件，uVision4版本。
+
+output(mdk).hex - 采用KEIL MDK编译好的可执行文件(定位在CPU内部Flash执行)，可以直接下载到CPU内部Flash执行。
+
+output(iar).hex - 采用IAR EWARM编译好的可执行文件(定位在CPU内部Flash执行)，，可以直接下载到CPU内部Flash执行。
+

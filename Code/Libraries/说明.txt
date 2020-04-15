@@ -1,0 +1,50 @@
+该文件下的文件均有ST公司提供，一般无需更改。
+
+DSP和标准外设库:
+	资源编号 : STSW-STM32065    
+	资源名称 : STM32F4 DSP and standard peripherals library
+	文件名   : stm32_f105-07_f2_f4_usb-host-device_lib.zip 
+	下载地址 : http://www.st.com/web/catalog/tools/FM147/CL1794/SC961/SS1743/PF257901#	
+
+USB库:
+	资源编号 : STSW-STM32046   
+	资源名称 : STM32F105/7, STM32F2 and STM32F4 USB on-the-go Host and device library (UM1021)
+	文件名   : stm32_f105-07_f2_f4_usb-host-device_lib.zip 
+	下载地址 : http://www.st.com/web/en/catalog/tools/PF257882
+
+ETH以太网库:
+	资源编号 : STSW-STM32046   
+	资源名称 : LwIP TCP/IP stack demonstration for STM32F4x7 microcontrollers (AN3966)
+	文件名   : stsw-stm32070.zip
+	下载地址 : http://www.st.com/web/catalog/tools/FM147/CL1794/SC961/SS1743/PF257906
+
+
+【CMSIS】
+	Cortex微控制器软件接口程序（Cortex Microcontroller Software Interface Standard (CMSIS). ）
+	版本: V4.2
+	发布日期: 31. July 2014
+
+【STM32F4xx_StdPeriph_Driver】
+	STM32F40x系列CPU标准外设驱动程序
+	版本: V1.5.0
+	发布日期:  06-March-2015
+
+【STM32_USB_OTG_Driver】
+	STM32F105/7xx, STM32F2xx and STM32F4xx USB Device Library
+	版本: V2.1.0
+	发布日期:   2012-03-19
+
+【STM32_USB_Device_Library】
+	STM32F105/7xx, STM32F2xx and STM32F4xx USB Device Library
+	版本: V1.1.0
+	发布日期:   2012-03-05
+
+【STM32_USB_HOST_Library】
+	STM32F105/7xx, STM32F2xx and STM32F4xx USB Host Library
+	版本: V2.1.0
+	发布日期:   2012-03-19
+
+【STM32F4x7_ETH_Driver】
+	STM32F4x7 Eth Library
+	版本: V1.1.0
+	发布日期:   31-July-2013

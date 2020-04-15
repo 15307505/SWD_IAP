@@ -1,0 +1,66 @@
+文件名：USB Mass Storage 模块移植和使用说明
+
+【移植说明】
+
+安富莱移植的USB Mass Storage 应用说明：
+usb_mass_storage 文件夹的文件主要来自于ST的USB固件库中的范例。
+安富莱电子对齐进行了整理。使其可以方便地添加到不同的工程中去。
+
+
+2. 需要 include 下面的文件：
+#include "usbd_msc_core.h"
+#include "usbd_usr.h"
+#include "usbd_desc.h"
+#include "usb_conf.h"
+
+extern USB_OTG_CORE_HANDLE     USB_OTG_dev;
+
+3. 我们创建了一个 usb_bsp.h 文件，包含了这些头文件和全局变量申明。因此只需要 #include "usb_bsp.h" 即可。
+
+4. 需要添加几个中断服务程序。这几个中断已经放到 usb_it.c 文件，只需要加到工程即可。
+
+5. 在工程中添加USB固件库：STM32_USB_Device_Library 和 STM32_USB_OTG_Driver
+	STM32_USB_Device_Library\Core\Core
+	STM32_USB_Device_Library\Class\msc
+	STM32_USB_OTG_Driver\src	
+6. 工程中添加预编译宏定义：USE_USB_OTG_FS, USE_EMBEDDED_PHY
+
+	VBUS_SENSING_ENABLED 是可选的
+
+7. 全局变量 USB_OTG_dev 定义在 usbd_usr.c 文件
+#ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
+  #if defined ( __ICCARM__ ) /*!< IAR Compiler */
+    #pragma data_alignment=4
+  #endif
+#endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
+
+__ALIGN_BEGIN USB_OTG_CORE_HANDLE     USB_OTG_dev __ALIGN_END ;
+
+8. 我们需要在 usb_bsp.h 中添加需要的文件。因此需要将
+
+【使用方法】
+1. 主程序调用 USBD_Init() 函数完成USB的硬件配置。 需要 #include "usb_bsp.h"
+	USBD_Init(&USB_OTG_dev,
+		#ifdef USE_USB_OTG_HS
+			USB_OTG_HS_CORE_ID,
+		#else
+			USB_OTG_FS_CORE_ID,
+		#endif
+			&USR_desc,
+			&USBD_MSC_cb,
+			&USR_cb);
+
+2. 动态移除USB连接调用：
+	DCD_DevDisconnect(&USB_OTG_dev);
+
+3. 动态恢复USB连接，请重新调用：USBD_Init 函数
+		//DCD_DevConnect(&USB_OTG_dev);  这个不好使
+		USBD_Init(&USB_OTG_dev,
+			#ifdef USE_USB_OTG_HS
+				USB_OTG_HS_CORE_ID,
+			#else
+				USB_OTG_FS_CORE_ID,
+			#endif
+				&USR_desc,
+				&USBD_MSC_cb,
+				&USR_cb);
