@@ -1,0 +1,45 @@
+链接地址：
+http://www.nxpic.org/module/forum/forum.php?mod=viewthread&tid=609502&extra=page%3D&page=1
+
+1.参考楼主的文写的代码，访问STM32L071x系列。走了一些弯路，这里补充几点，但愿有所帮助。
+× 数据是下降沿放出，上升沿锁存（输入输出都一样）
+× 复位之后必须首先读取DP ID，之后向DP的0x4寄存器写0x54000000，使能debug
+× 向DP的0x8寄存器写0xF0设定AP bank值，然后读取AP的0xC寄存器，可以得到AP ID
+× 注意AP是POST属性，所以需要读取2次才能得到正确的值
+× 读出AP的0x0寄存器（CSW），将最后三个比特改为b010，使能32位访问（注意要先将DP的0x8写为0）
+× 然后向AP的0x4地址写0x40015800，从AP的0xC读取device ID
+以上如果能正确读到device ID，说明mem-AP通道打通了，就可以随意访问任何地址的内容。
+
+2.楼主你好 首先感谢您的分享 我用你的代码在stm32f103c8t6上通过这个swd调试另一块stm32f103c8t6，在头文件swd_pin.h中移植了相关配置后，在SWJ_InitDebu()函数中可以读到IDCODE，但是SELECT和DP_ABORT这些寄存器读写有问题，折磨了好几天后无解，今天拿到一台示波器测波形，发现写寄存器时没有32（33）位的数据波形，跟踪发现是调用了这个函数按位输出了SWDIO信息：
+上层函数摘取部分：
+for(n = 32; n; n--)
+{
+        SW_WRITE_BIT(val); /* Write WDATA[0:31] */
+        parity += val;
+        val >>= 1;
+}
+上面的形参val是一个32位uint，又
+void SW_WRITE_BIT(uint32_t bit)
+{
+    SWDIO_OUT(bit);
+    SW_CLOCK_CYCLE();
+}
+这是宏定义
+#define SWDIO_OUT(n)                                    {if ( n ) SWDIO_SET(); else SWDIO_CLR();}
+本来写的32位数据是0x0000001E，结果波形只有一个高低电平，原来是上几句有问题，if条件非0都为真，所以修改成:
+void SW_WRITE_BIT(uint32_t bit)
+{
+    SWDIO_OUT(bit&0x01);//提取位
+    SW_CLOCK_CYCLE();
+}
+测试发现所有寄存器都可以正确读写了。
+
+3.参考楼主的文写的代码，访问STM32L071x系列。走了一些弯路，这里补充几点，但愿有所帮助。
+× 数据是下降沿放出，上升沿锁存（输入输出都一样）
+× 复位之后必须首先读取DP ID，之后向DP的0x4寄存器写0x54000000，使能debug
+× 向DP的0x8寄存器写0xF0设定AP bank值，然后读取AP的0xC寄存器，可以得到AP ID
+× 注意AP是POST属性，所以需要读取2次才能得到正确的值
+× 读出AP的0x0寄存器（CSW），将最后三个比特改为b010，使能32位访问（注意要先将DP的0x8写为0）
+× 然后向AP的0x4地址写0x40015800，从AP的0xC读取device ID
+以上如果能正确读到device ID，说明mem-AP通道打通了，就可以随意访问任何地址的内容。
+
